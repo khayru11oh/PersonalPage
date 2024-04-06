@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"log"
@@ -9,22 +10,22 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// const (
-// 	user     = "postgres"
-// 	password = 1819
-// 	dbname   = "projects"
-// 	sslmode  = "disable"
-// )
+const (
+	user     = "postgres"
+	password = 1819
+	dbname   = "projects"
+	sslmode  = "disable"
+)
 
-// type Photos struct {
-// 	ID          int64  `json:"id" db:"id"`
-// 	FileName    string `json:"filename" db:"filename"`
-// 	Description string `json:"description" db:"description"`
-// }
+type Photos struct {
+	ID          int64  `json:"id" db:"id"`
+	FileName    string `json:"filename" db:"filename"`
+	Description string `json:"description" db:"description"`
+}
 
 var tmpl *template.Template
 
-// var dbase *sql.DB
+var dbase *sql.DB
 
 // serve all html templates
 func init() {
@@ -38,26 +39,26 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Project handler (projects.html)
 func projectHandler(w http.ResponseWriter, r *http.Request) {
-	// rows, err := dbase.Query("SELECT * FROM links;")
-	// if err!=nil {
-	// 	log.Println(err.Error())
-	// }
-	// defer rows.Close()
-	// allPhotos := []Photos{}
+	rows, err := dbase.Query("SELECT * FROM links;")
+	if err!=nil {
+		log.Println(err.Error())
+	}
+	defer rows.Close()
+	allPhotos := []Photos{}
 
-	// for rows.Next() {
-	// 	p := Photos{}
+	for rows.Next() {
+		p := Photos{}
 
-	// 	err := rows.Scan(&p.ID, &p.FileName, &p.Description)
-	// 	if err != nil {
-	// 		log.Println(err.Error())
-	// 		continue
-	// 	}
+		err := rows.Scan(&p.ID, &p.FileName, &p.Description)
+		if err != nil {
+			log.Println(err.Error())
+			continue
+		}
 
-	// 	allPhotos = append(allPhotos, p)
-	// }
-
-	tmpl.ExecuteTemplate(w, "projects.html", nil)
+		allPhotos = append(allPhotos, p)
+	}
+	
+	tmpl.ExecuteTemplate(w, "projects.html", allPhotos)
 }
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -67,13 +68,13 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	// connection to postgres database
-	// connStr := fmt.Sprintf("user=%s dbname=%s password=%d sslmode=%s", user, dbname, password, sslmode)
-	// db, err := sql.Open("postgres", connStr)
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
-	// dbase = db
-	// defer db.Close()
+	connStr := fmt.Sprintf("user=%s dbname=%s password=%d sslmode=%s", user, dbname, password, sslmode)
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	dbase = db
+	defer db.Close()
 
 	// serving all files (like css, photos, js) in direction view
 	fileServer := http.FileServer(http.Dir("../view"))
