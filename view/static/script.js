@@ -1,11 +1,35 @@
+"use strict";
+
+
+lightGallery(document.querySelector('.gallery'));
+
+
+
+// image uploader
+
+const inputFile = document.querySelector('#myFile');
+const uploadP = document.querySelector('.upload-p');
+
+
+inputFile.addEventListener('change', uploadImage);
+
+function uploadImage() {
+    const file = this.files[0];
+    uploadP.innerHTML = file.name;
+    
+}
 
 
 
 
-/*                           projects               */
+
+
+
+
+
 /*                        header          */
 
-let menuLsit = document.getElementById('menu-list');
+let menuLsit = document.querySelector('#menu-list');
 menuLsit.style.maxHeight = '0px';
 document.querySelector(".menu-icon").addEventListener("click", () => {
     if(menuLsit.style.maxHeight == '0px') {
@@ -33,10 +57,3 @@ const typed = new Typed('#multiple', {
 
 
 
-// function toggleMenu() {
-//
-// }
-
-///////////////////////////////////////////////////
-
-lightGallery(document.querySelector('.gallery'));

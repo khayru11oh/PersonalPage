@@ -17,6 +17,8 @@ const (
 	sslmode  = "disable"
 )
 
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 2
+
 type Photos struct {
 	ID          int64  `json:"id" db:"id"`
 	FileName    string `json:"filename" db:"filename"`
@@ -40,7 +42,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 // Project handler (projects.html)
 func projectHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := dbase.Query("SELECT * FROM links;")
-	if err!=nil {
+	if err != nil {
 		log.Println(err.Error())
 	}
 	defer rows.Close()
@@ -57,12 +59,13 @@ func projectHandler(w http.ResponseWriter, r *http.Request) {
 
 		allPhotos = append(allPhotos, p)
 	}
-	
+
 	tmpl.ExecuteTemplate(w, "projects.html", allPhotos)
 }
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "upload.html", nil)
+
 }
 
 func main() {

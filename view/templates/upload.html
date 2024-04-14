@@ -1,23 +1,21 @@
-   
-    {{template "header"}}
 
-    <section class="upload-container">
-        <div class="upload-box">
-            <div class="upload-photo">
-                <div class="cloud-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                <h1>Drag & Drop to Upload</h1>
-                <span>OR</span>
-                <label for="my-photo" class="my-photo">Browse File</label>
-                <input type="file" name="" id="my-photo" hidden accept="image/jpeg, image/png, image/jpg">
+
+
+
+{{template "header"}}
+
+
+    <section class="uploader-container">
+        <form action="#" method="post" enctype="multipart/form-data" class="myForm">
+            <div class="upload">
+                <label for="myFile"><i class="fa-solid fa-cloud-arrow-up" id="view-i"></i></label>
+                <input type="file" accept="image/*" name="myFile" id="myFile" hidden>
+                <p class="upload-p">Click the icon & Choose an image</p>
             </div>
-            
-            <div class="description">
-                <input placeholder="Info..." type="text" maxlength="100" name="" id="" required>
-            </div>
-            <button class="btn-send">Send</button>
-        </div>
-        
-        
+            <input type="text" name="desc" id="description" class="description" placeholder="&nbsp; About a file...">
+            <input type="submit" value="Upload" class="uploadBtn">
+        </form>
     </section>
 
-    {{template "footer"}}
+
+{{template "footer"}}
